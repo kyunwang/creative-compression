@@ -6,3 +6,5 @@ input_images/*
 bin
 static/uploads
 model
+
+cli/static
