@@ -36,14 +36,8 @@ def create_bounding_box_overlay(coords, source, settings, index):
 	ymin, ymax = sorted([startY, endY])
 
 
-	#offsets = (xmin * source_width, ymin * source_height, xmax * source_width, ymax * source_height)
-
 	source_width, source_height = source.size
 
-	# print('N')
-	# print(startX, endX, startY, endY, xmin, xmax, ymin, ymax, source_height, source_width)
-	# print('N')
-	# print('-')
 
 	clientWidth = settings["width"]
 	scale = source_width / int(clientWidth) if clientWidth else 1
@@ -52,11 +46,6 @@ def create_bounding_box_overlay(coords, source, settings, index):
 	[left, top, right, bottom] = offsets
 	width = max(right - left, 1)
 	height = max(bottom - top, 1)
-
-	print('N')
-	print(offsets, width, height)
-	print('N')
-	print('-')
 
 	def adjustOffset(offset, step, index):
 		dimension = width if index % 2 == 0 else height
@@ -73,7 +62,6 @@ def create_bounding_box_overlay(coords, source, settings, index):
 		divisor = speed * (step + 1)
 		width_bit = (width / divisor) / square_root_width
 		height_bit = (height / divisor) / square_root_height
-		# print(width_bit, height_bit)
 
 		small_width = (width**(1/(step + 2))) * width_bit
 		small_height = (height**(1/(step + 2))) * height_bit
@@ -138,6 +126,10 @@ def compose_image(source, background, box_overlays):
 
 	return [composition, frames]
 
+def save_image(filename, composition, destination):
+	rgb_composition = composition.convert('RGB')
+	rgb_composition.save(f'{destination}/{filename}', 'JPEG', optimize=True, quality=80, progressive=True)
+	
 def save_versions(source, composition, destination):
 	# if not os.path.exists(destination):
 	# 	os.makedirs(destination)
